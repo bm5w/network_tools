@@ -1,8 +1,10 @@
 #! /usr/bin/env python
+"""Echo server in socket connection: receives and sends back a message."""
 import socket
 
 
 if __name__ == '__main__':
+    """Run from terminal, this will recieve a messages and send them back."""
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM,
                                   socket.IPPROTO_IP)
     server_socket.bind(('127.0.0.1', 50000))

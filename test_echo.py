@@ -11,7 +11,7 @@ def test_basic(string="This is a test."):
 
 
 def test_exact32():
-    """Test echo server and client with string of length 32, the buffer size."""
+    """Test echo server and client with string length 32, the buffer size."""
     test_basic("12345678901234567890123456789012")
 
 
