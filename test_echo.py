@@ -17,9 +17,10 @@ def test_exact32():
 def test_unicode():
     """Test that server and client handle encoding and decoding of unicode."""
     inp = u'Testing «ταБЬℓσ»: 1<2 & 4+1>3, now 20 off!'
+    inp = inp.encode('utf-8')
     process = subprocess.Popen(['./echo_client.py', inp],
                                stdout=subprocess.PIPE)
-    assert inp == process.stdout.readline().rstrip().decode('utf-8')
+    assert inp == process.stdout.readline().rstrip()
 
 
 def test_long():
