@@ -3,6 +3,16 @@
 import socket
 
 
+def response_ok():
+    """Return byte string 200 ok response."""
+    return u"HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-length: 18\n\r\neverything is okay".encode('utf-8')
+
+
+def reponse_error(error_code, reason):
+    """Return byte string error code."""
+    return u"HTTP/1.1 {} {}".format(error_code, reason).encode('utf-8')
+
+
 if __name__ == '__main__':
     """Run from terminal, this will recieve a messages and send them back."""
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM,
