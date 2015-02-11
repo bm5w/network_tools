@@ -95,3 +95,10 @@ def test_server_505_2():
     """In response to HTTP20 SET request, server responds with error."""
     assert client('SET /path/to/index.html HTTP/2.0') == \
         'HTTP/1.1 505 HTTP Version Not Supported'
+
+
+def test_server_url():
+    """Test server by going to URL."""
+    import urllib2
+    response = urllib2.urlopen('http://127.0.0.1:50000/')
+    assert response.read() == 'everything is okay'
