@@ -29,3 +29,16 @@ def test_long():
         run the client script in a separate terminal. The client script should\
          take an argument which is the message to send.  Upon completing, the \
          response from the server should be printed to stdout.")
+
+
+def test_response_ok():
+    """Test that function returns appropriate byte string."""
+    from echo_server import response_ok
+    assert response_ok() == 'HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-length: 18\n\r\neverything is okay'
+
+
+def test_response_error():
+    """Test that function returns appropriate byte string."""
+    from echo_server import response_error
+    assert response_error(404, 'Not Found') == 'HTTP/1.1 404 Not Found'
+
