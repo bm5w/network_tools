@@ -57,9 +57,10 @@ if __name__ == '__main__':
                 msg_part = conn.recv(buffsize)
                 msg += msg_part
                 if len(msg_part) < buffsize:
+                    # print 'msg:\n{}'.format(msg)
                     done = True
                     out = parse_request2(msg)
-                    print out
+                    # print 'response:\n{}'.format(out)
                     conn.sendall(out)
                     conn.shutdown(socket.SHUT_WR)
                     conn.close()
