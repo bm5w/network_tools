@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import subprocess
 from echo_client import client
 
 
@@ -36,65 +35,65 @@ def test_response_ok():
     """Test that function returns appropriate byte string."""
     from echo_server import response_ok
     assert response_ok() == \
-        'HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-length: 18\n\r\neverything is okay'
+        'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\neverything is okay'
 
 
 def test_response_error():
     """Test that function returns appropriate byte string."""
     from echo_server import response_error
-    assert response_error(404, 'Not Found') == 'HTTP/1.1 404 Not Found\nContent-Type: text/plain\nContent-length: 18\r\nNot Found'
+    assert response_error(404, 'Not Found') == 'HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nNot Found'
 
 
 def test_simple_parse_request():
     """Test that function returns appropriate URI."""
     from echo_server import parse_request
-    assert parse_request('GET /path/to/index.html HTTP/1.1\nHost: www.host1.com:80\r\n') == \
+    assert parse_request('GET /path/to/index.html HTTP/1.1\r\nHost: www.host1.com:80\r\n\r\n') == \
         '/path/to/index.html'
 
 
 def test_put_parse_request():
     """Test that function returns error when PUT method requested."""
     from echo_server import parse_request
-    assert parse_request('PUT /path/to/index.html HTTP/1.1\nHost: www.host1.com:80\r\n') == \
-        'HTTP/1.1 405 Method Not Allowed\nContent-Type: text/plain\nContent-length: 18\r\nMethod Not Allowed'
+    assert parse_request('PUT /path/to/index.html HTTP/1.1\r\nHost: www.host1.com:80\r\n') == \
+        'HTTP/1.1 405 Method Not Allowed\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nMethod Not Allowed'
 
 
 def test_HTTP10_parse_request():
     """Test that function returns error on HTTP/1.0 request."""
     from echo_server import parse_request
-    assert parse_request('GET /path/to/index.html HTTP/1.0\nHost: www.host1.com:80\r\n') == \
-        'HTTP/1.1 505 HTTP Version Not Supported\nContent-Type: text/plain\nContent-length: 18\r\nHTTP Version Not Supported'
+    assert parse_request('GET /path/to/index.html HTTP/1.0\r\nHost: www.host1.com:80\r\n') == \
+        'HTTP/1.1 505 HTTP Version Not Supported\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nHTTP Version Not Supported'
 
 
 def test_HTTP20_parse_request():
     """Test that function returns error on HTTP/2.0 request."""
     from echo_server import parse_request
-    assert parse_request('GET /path/to/index.html HTTP/2.0\nHost: www.host1.com:80\r\n') == \
-        'HTTP/1.1 505 HTTP Version Not Supported\nContent-Type: text/plain\nContent-length: 18\r\nHTTP Version Not Supported'
+    assert parse_request('GET /path/to/index.html HTTP/2.0\r\nHost: www.host1.com:80\r\n') == \
+        'HTTP/1.1 505 HTTP Version Not Supported\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nHTTP Version Not Supported'
 
 
 def test_server():
     """In response to incoming request, server responds with 200 ok message."""
     from echo_server import response_ok
-    assert client('GET /path/to/index.html HTTP/1.1\nHost: www.host1.com:80\r\n') == response_ok()
+    assert client('GET /path/to/index.html HTTP/1.1\r\nHost: www.host1.com:80\r\n\r\n') == response_ok()
 
 
 def test_server_505():
     """In response to HTTP20 request, server responds with error."""
-    assert client('GET /path/to/index.html HTTP/2.0\nHost: www.host1.com:80\r\n') == \
-        'HTTP/1.1 505 HTTP Version Not Supported\nContent-Type: text/plain\nContent-length: 18\r\nHTTP Version Not Supported'
+    assert client('GET /path/to/index.html HTTP/2.0\r\nnHost: www.host1.com:80\r\n\r\n') == \
+        'HTTP/1.1 505 HTTP Version Not Supported\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nHTTP Version Not Supported'
 
 
 def test_server_405():
     """In response to HTTP20 request, server responds with error."""
-    assert client('PUT /path/to/index.html HTTP/1.1\nHost: www.host1.com:80\r\n') == \
-        'HTTP/1.1 405 Method Not Allowed\nContent-Type: text/plain\nContent-length: 18\r\nMethod Not Allowed'
+    assert client('PUT /path/to/index.html HTTP/1.1\r\nHost: www.host1.com:80\r\n\r\n') == \
+        'HTTP/1.1 405 Method Not Allowed\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nMethod Not Allowed'
 
 
 def test_server_505_2():
     """In response to HTTP20 SET request, server responds with error."""
-    assert client('SET /path/to/index.html HTTP/2.0\nHost: www.host1.com:80\r\n') == \
-        'HTTP/1.1 505 HTTP Version Not Supported\nContent-Type: text/plain\nContent-length: 18\r\nHTTP Version Not Supported'
+    assert client('SET /path/to/index.html HTTP/2.0\r\nHost: www.host1.com:80\r\n\r\n') == \
+        'HTTP/1.1 505 HTTP Version Not Supported\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nHTTP Version Not Supported'
 
 
 def test_server_url():
