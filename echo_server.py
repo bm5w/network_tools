@@ -10,7 +10,7 @@ def response_ok():
 
 def response_error(error_code, reason):
     """Return byte string error code."""
-    return u"HTTP/1.1 {} {}".format(error_code, reason).encode('utf-8')
+    return u"HTTP/1.1 {} {}\nContent-Type: text/plain\nContent-length: 18\r\n{}".format(error_code, reason, reason).encode('utf-8')
 
 
 def parse_request(request):
