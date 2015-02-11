@@ -13,6 +13,33 @@ def response_error(error_code, reason):
     return u"HTTP/1.1 {} {}".format(error_code, reason).encode('utf-8')
 
 
+def parse_request(request):
+    """Parse HTTP request and return URI requested.
+    If not GET requests, raises error.
+    If not HTTP/1.1 request, raises error."""
+    first_line = request.split("\n")[0].split()
+    if first_line[0] == 'GET':
+        if first_line[2] == 'HTTP/1.1':
+            return first_line[1]
+        else:
+            return response_error(505, 'HTTP Version Not Supported')
+    else:
+        return response_error(405, 'Method Not Allowed')
+
+
+def parse_request2(request):
+    """Parse HTTP request and return response_ok.
+    If not GET requests, raises error.
+    If not HTTP/1.1 request, raises error."""
+    first_line = request.split("\n")[0].split()
+    if first_line[0] == 'GET':
+        if first_line[2] == 'HTTP/1.1':
+            return response_ok()
+        else:
+            return response_error(505, 'HTTP Version Not Supported')
+    else:
+        return response_error(405, 'Method Not Allowed')
+
 
 if __name__ == '__main__':
     """Run from terminal, this will recieve a messages and send them back."""
@@ -31,7 +58,9 @@ if __name__ == '__main__':
                 msg += msg_part
                 if len(msg_part) < buffsize:
                     done = True
-                    conn.sendall(msg)
+                    out = parse_request2(msg)
+                    print out
+                    conn.sendall(out)
                     conn.shutdown(socket.SHUT_WR)
                     conn.close()
     except KeyboardInterrupt:
