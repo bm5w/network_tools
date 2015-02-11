@@ -18,13 +18,13 @@ def parse_request(request):
     If not GET requests, raises error.
     If not HTTP/1.1 request, raises error."""
     first_line = request.split("\n")[0].split()
-    if first_line[0] == 'GET':
-        if first_line[2] == 'HTTP/1.1':
+    if first_line[2] == 'HTTP/1.1':
+        if first_line[0] == 'GET':
             return first_line[1]
         else:
-            return response_error(505, 'HTTP Version Not Supported')
+            return response_error(405, 'Method Not Allowed')
     else:
-        return response_error(405, 'Method Not Allowed')
+        return response_error(505, 'HTTP Version Not Supported')
 
 
 def parse_request2(request):
@@ -32,13 +32,13 @@ def parse_request2(request):
     If not GET requests, raises error.
     If not HTTP/1.1 request, raises error."""
     first_line = request.split("\n")[0].split()
-    if first_line[0] == 'GET':
-        if first_line[2] == 'HTTP/1.1':
+    if first_line[2] == 'HTTP/1.1':
+        if first_line[0] == 'GET':
             return response_ok()
         else:
-            return response_error(505, 'HTTP Version Not Supported')
+            return response_error(405, 'Method Not Allowed')
     else:
-        return response_error(405, 'Method Not Allowed')
+        return response_error(505, 'HTTP Version Not Supported')
 
 
 if __name__ == '__main__':

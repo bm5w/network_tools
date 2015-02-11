@@ -74,18 +74,24 @@ def test_HTTP20_parse_request():
 
 
 def test_server():
-    """In reponse to incoming request, server responds with 200 ok message."""
+    """In response to incoming request, server responds with 200 ok message."""
     from echo_server import response_ok
     assert client('GET /path/to/index.html HTTP/1.1') == response_ok()
 
 
 def test_server_505():
-    """In reponse to HTTP20 request, server responds with error."""
+    """In response to HTTP20 request, server responds with error."""
     assert client('GET /path/to/index.html HTTP/2.0') == \
         'HTTP/1.1 505 HTTP Version Not Supported'
 
 
 def test_server_405():
-    """In reponse to HTTP20 request, server responds with error."""
+    """In response to HTTP20 request, server responds with error."""
     assert client('PUT /path/to/index.html HTTP/1.1') == \
         'HTTP/1.1 405 Method Not Allowed'
+
+
+def test_server_505_2():
+    """In response to HTTP20 SET request, server responds with error."""
+    assert client('SET /path/to/index.html HTTP/2.0') == \
+        'HTTP/1.1 505 HTTP Version Not Supported'
