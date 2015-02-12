@@ -1,8 +1,38 @@
 # -*- coding: utf-8 -*-
-from echo_client import client
-import pytest
-from echo_server import Error404
+# from echo_client import client
+# import pytest
+# from echo_server import Error404
+import os
 
+
+def test_server_home():
+    """Test that html server returns directory listing as html."""
+    import urllib2
+    response = urllib2.urlopen('http://127.0.0.1:50000/')
+    assert response.read() == '<!DOCTYPE html><html><ul><p>. contains:</p><li>a_web_page.html</li><li>images</li><li>make_time.py</li><li>sample.txt</li></ul></html>'
+
+
+def test_server_html():
+    """Test that html server returns HTML file."""
+    import urllib2
+    response = urllib2.urlopen('http://127.0.0.1:50000/a_web_page.html').read()
+    assert response == '<!DOCTYPE html>\n<html>\n<body>\n\n<h1>North Carolina</h1>\n\n<p>A fine place to spend a week learning web programming!</p>\n\n</body>\n</html>\n\n'
+
+
+def test_server_txt():
+    """Test that html server returns txt file."""
+    import urllib2
+    response = urllib2.urlopen('http://127.0.0.1:50000/sample.txt').read()
+    assert response == 'This is a very simple text file.\nJust to show that we can server it up.\nIt is three lines long.\n'
+
+
+def test_server_file():
+    """Test that html server returns JPEG."""
+    import urllib2
+    response = urllib2.urlopen('http://127.0.0.1:50000/images/JPEG_example.jpg').read()
+    os.chdir('/Users/mark/projects/network_tools/webroot')
+    actual = open('images/JPEG_example.jpg', 'rb').read()
+    assert actual == response
 
 # def test_basic(string=u"This is a test."):
 #     """Test function to test echo server and client with inputted string."""
@@ -104,26 +134,22 @@ from echo_server import Error404
 #     response = urllib2.urlopen('http://127.0.0.1:50000/')
 #     assert response.read() == 'everything is okay'
 
-def test_resource_uri_folder():
-    from echo_server import resource_uri
-    uri = 'images'
-    print resource_uri(uri)
-    assert resource_uri(uri) == ('text/html', '<!DOCTYPE html><html><ul><p>images contains:</p><li>JPEG_example.jpg</li><li>sample_1.png</li><li>Sample_Scene_Balls.jpg</li></ul></html>')
+# def test_resource_uri_folder():
+#     from echo_server import resource_uri
+#     uri = 'images'
+#     print resource_uri(uri)
+#     assert resource_uri(uri) == ('text/html', '<!DOCTYPE html><html><ul><p>images contains:</p><li>JPEG_example.jpg</li><li>sample_1.png</li><li>Sample_Scene_Balls.jpg</li></ul></html>')
 
 
-def test_resource_uri_file():
-    from echo_server import resource_uri
-    uri = 'a_web_page.html'
-    print resource_uri(uri)
-    assert resource_uri(uri) == ('text/html', '<!DOCTYPE html>\n<html>\n<body>\n\n<h1>North Carolina</h1>\n\n<p>A fine place to spend a week learning web programming!</p>\n\n</body>\n</html>\n\n')
+# def test_resource_uri_file():
+#     from echo_server import resource_uri
+#     uri = 'a_web_page.html'
+#     print resource_uri(uri)
+#     assert resource_uri(uri) == ('text/html', '<!DOCTYPE html>\n<html>\n<body>\n\n<h1>North Carolina</h1>\n\n<p>A fine place to spend a week learning web programming!</p>\n\n</body>\n</html>\n\n')
 
 
-def test_resource_uri_404():
-    from echo_server import resource_uri
-    uri = 'image'
-    with pytest.raises(Error404):
-        resource_uri(uri)
-
-def test_server_file():
-    assert client('GET images HTTP/1.1\r\nHost: www.host1.com:80\r\n\r\n') == '<!DOCTYPE html><html><ul><p>images contains:</p><li>JPEG_example.jpg</li><li>sample_1.png</li><li>Sample_Scene_Balls.jpg</li></ul></html>'
-
+# def test_resource_uri_404():
+#     from echo_server import resource_uri
+#     uri = 'image'
+#     with pytest.raises(Error404):
+#         resource_uri(uri)
