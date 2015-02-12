@@ -9,7 +9,7 @@ def client(inputted):
     client_socket.connect(('127.0.0.1', 50000))
     client_socket.sendall(inputted)
     client_socket.shutdown(socket.SHUT_WR)
-    buffsize = 32
+    buffsize = 4096
     done = False
     msg = ''
     while not done:
