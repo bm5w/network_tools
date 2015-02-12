@@ -10,26 +10,27 @@ def response_ok():
 
 def response_error(error_code, reason):
     """Return byte string error code."""
-    return u"HTTP/1.1 {} {}\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\n{}".format(error_code, reason, reason).encode('utf-8')
+    return u"HTTP/1.1 {} {}\r\nContent-Type: text/plain\r\nContent-length: {}\r\n\r\n{}".format(error_code, reason, len(reason), reason).encode('utf-8')
 
 
-def parse_request(request):
-    """Parse HTTP request and return URI requested.
-    If not GET requests, raises error.
-    If not HTTP/1.1 request, raises error."""
-    first_line = request.split("\n")[0].split()
-    if first_line[2] == 'HTTP/1.1':
-        if first_line[0] == 'GET':
-            return first_line[1]
-        else:
-            return response_error(405, 'Method Not Allowed')
-    else:
-        return response_error(505, 'HTTP Version Not Supported')
+# def parse_request(request):
+#     """Parse HTTP request and return URI requested.
+#     If not GET requests, raises error.
+#     If not HTTP/1.1 request, raises error."""
+#     first_line = request.split("\n")[0].split()
+#     if first_line[2] == 'HTTP/1.1':
+#         if first_line[0] == 'GET':
+#             return first_line[1]
+#         else:
+#             return response_error(405, 'Method Not Allowed')
+#     else:
+#         return response_error(505, 'HTTP Version Not Supported')
 
 
 class Error405(BaseException):
     def __init__(self):
         self.out = response_error(405, 'Method Not Allowed')
+
     def __str__(self):
         return self.out
 
@@ -37,6 +38,7 @@ class Error405(BaseException):
 class Error505(BaseException):
     def __init__(self):
         self.out = response_error(505, 'HTTP Version Not Supported')
+
     def __str__(self):
         return self.out
 
