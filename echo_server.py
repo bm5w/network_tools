@@ -116,29 +116,34 @@ if __name__ == '__main__':
     server_socket.listen(1)
     buffsize = 4096
     try:
+        # After closing a connection, wait for another connection
         while True:
             msg = ''
             done = False
             conn, addr = server_socket.accept()
+            # Receive entire message
             while not done:
                 msg_part = conn.recv(buffsize)
                 msg += msg_part
                 if len(msg_part) < buffsize:
-                    # for some reason the server is receiving a blank request
-                    if len(msg) == 0:
-                        print "msg length 0"
-                        break
+                    # # for some reason the server is receiving a blank request
+                    # if len(msg) == 0:
+                    #     print "msg length 0"
+                    #     break
                     done = True
-                    first_line = parse_request2(msg)
-                    try:
-                        uri = check_request(first_line)
-                        tupl = resource_uri(uri)
-                        out = response_ok(tupl)
-                    except (Error405, Error505, Error404) as e:
-                        out = str(e)
-                    conn.sendall(out)
-                    conn.shutdown(socket.SHUT_WR)
-                    conn.close()
+            # Check that msg isn't 0 byte message, that Chrome was sending
+            # If not, send back response
+            if msg:
+                first_line = parse_request2(msg)
+                try:
+                    uri = check_request(first_line)
+                    tupl = resource_uri(uri)
+                    out = response_ok(tupl)
+                except (Error405, Error505, Error404) as e:
+                    out = str(e)
+                conn.sendall(out)
+            conn.shutdown(socket.SHUT_WR)
+            conn.close()
     except KeyboardInterrupt:
         print 'I successfully stopped.'
         server_socket.close()
