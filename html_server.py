@@ -1,11 +1,11 @@
 #! /usr/bin/env python
-"""Echo server in socket connection: receives and sends back a message."""
+"""HTML server which receives requests and serves back appropriate response."""
 import os
 import mimetypes
 
 
 def response_ok(tuple):
-    """Return byte string 200 ok response."""
+    """Given tuple with content-type and body, generate http/1.1 response."""
     # u"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\neverything is okay".encode('utf-8')
     okay = u"HTTP/1.1 200 OK\r\nContent-Type: "
     c_len = u"\r\nContent-length: "
@@ -14,10 +14,10 @@ def response_ok(tuple):
 
 
 def response_error(error_code, reason):
-    """Return byte string error code."""
+    """Given error code and reason, generate http/1.1 response."""
     return u"HTTP/1.1 {} {}\r\nContent-Type: text/plain\r\nContent-length: {}\r\n\r\n{}".format(error_code, reason, len(reason), reason).encode('utf-8')
 
-
+# define new error classes
 class Error404(BaseException):
     def __init__(self):
         self.out = response_error(404, 'Not Found')
@@ -48,7 +48,7 @@ def parse_request2(request):
 
 
 def check_request(first_line):
-    """Check HTTP 1.1 and GET, then return uri."""
+    """Check HTTP 1.1 and GET, raises error, if not, return uri."""
     print "first_line: {}".format(first_line)
     if first_line[2] != 'HTTP/1.1':
         raise Error505
@@ -58,7 +58,7 @@ def check_request(first_line):
 
 
 def resource_uri(uri):
-    """Given URI, returns tuple with a type header and a body.
+    """Given URI, returns tuple with content-type and a body.
     If directory, returns html listing of directory.
     If file, returns content of file as body.
     If resource not found, raise Error404.
@@ -88,6 +88,7 @@ def resource_uri(uri):
 
 
 def get_message(socket, address):
+    """Receive entire message and sends back response through socket."""
     buffsize = 4096
     msg = ''
     # Receive entire message
@@ -118,7 +119,7 @@ def html_response(msg):
 
 
 def start():
-    """Run from terminal, this will recieve a messages and send them back."""
+    """Starts server using gevent and allows asynchronous connections."""
     # set root directory appropriately
     os.chdir('/Users/mark/projects/network_tools/webroot')
     from gevent.server import StreamServer
