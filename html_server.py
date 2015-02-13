@@ -127,8 +127,8 @@ def start():
     from gevent.server import StreamServer
     from gevent.monkey import patch_all
     patch_all()
-    server = StreamServer(('localhost', 7474), get_message)
-    print('Starting echo server on port 7474')
+    server = StreamServer(('127.0.0.1', 10001), get_message)
+    print('Starting echo server on port 10001')
     server.serve_forever()
 
 if __name__ == '__main__':

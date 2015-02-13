@@ -9,25 +9,25 @@ import threading
 
 def test_server_home(start_server):
     """Test that html server returns directory listing as html."""
-    response = urllib2.urlopen('http://localhost:7474/')
+    response = urllib2.urlopen('http://127.0.0.1:10001/')
     assert response.read() == '<!DOCTYPE html><html><ul><p>. contains:</p><li><a href="./a_web_page.html">a_web_page.html</a></li><li><a href="./images">images</a></li><li><a href="./make_time.py">make_time.py</a></li><li><a href="./sample.txt">sample.txt</a></li></ul></html>'
 
 
 def test_server_html(start_server):
     """Test that html server returns HTML file."""
-    response = urllib2.urlopen('http://localhost:7474/a_web_page.html').read()
+    response = urllib2.urlopen('http://127.0.0.1:10001/a_web_page.html').read()
     assert response == '<!DOCTYPE html>\n<html>\n<body>\n\n<h1>North Carolina</h1>\n\n<p>A fine place to spend a week learning web programming!</p>\n\n</body>\n</html>\n\n'
 
 
 def test_server_txt(start_server):
     """Test that html server returns txt file."""
-    response = urllib2.urlopen('http://localhost:7474/sample.txt').read()
+    response = urllib2.urlopen('http://127.0.0.1:10001/sample.txt').read()
     assert response == 'This is a very simple text file.\nJust to show that we can server it up.\nIt is three lines long.\n'
 
 
 def test_server_file(start_server):
     """Test that html server returns JPEG."""
-    response = urllib2.urlopen('http://localhost:7474/images/JPEG_example.jpg').read()
+    response = urllib2.urlopen('http://127.0.0.1:10001/images/JPEG_example.jpg').read()
     os.chdir('/Users/mark/projects/network_tools/webroot')
     actual = open('images/JPEG_example.jpg', 'rb').read()
     assert actual == response
@@ -48,7 +48,7 @@ def test_server_error_HTTP20():
 def test_server_error_server_404():
     """In response to HTTP20 request, server responds with correct error."""
     with pytest.raises(urllib2.HTTPError) as error:
-        urllib2.urlopen('http://localhost:7474/images/JPEG_example2.jpg')
+        urllib2.urlopen('http://127.0.0.1:10001/images/JPEG_example2.jpg')
     assert str(error.value) == 'HTTP Error 404: Not Found'
 
 
@@ -75,7 +75,7 @@ def start_server():
     #         from gevent_echo_server import echo
     #         from gevent.monkey import patch_all
     #         patch_all()
-    #         server = StreamServer(('localhost', 7474), echo)
+    #         server = StreamServer(('127.0.0.1', 10001), echo)
     #         target = server.serve_forever
     # else:
     from html_server import start as target
