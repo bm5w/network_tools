@@ -17,6 +17,7 @@ def response_error(error_code, reason):
     """Given error code and reason, generate http/1.1 response."""
     return u"HTTP/1.1 {} {}\r\nContent-Type: text/plain\r\nContent-length: {}\r\n\r\n{}".format(error_code, reason, len(reason), reason).encode('utf-8')
 
+
 # define new error classes
 class Error404(BaseException):
     def __init__(self):
@@ -126,7 +127,7 @@ def start():
     from gevent.server import StreamServer
     from gevent.monkey import patch_all
     patch_all()
-    server = StreamServer(('127.0.0.1', 7474), get_message)
+    server = StreamServer(('localhost', 7474), get_message)
     print('Starting echo server on port 7474')
     server.serve_forever()
 
