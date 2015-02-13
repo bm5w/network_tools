@@ -3,13 +3,13 @@ import os
 import sys
 import pytest
 import urllib2
-from echo_server import html_response
+from html_server import html_response
 
 
 def test_server_home(start_server):
     """Test that html server returns directory listing as html."""
     response = urllib2.urlopen('http://127.0.0.1:50000/')
-    assert response.read() == '<!DOCTYPE html><html><ul><p>. contains:</p><li>a_web_page.html</li><li>images</li><li>make_time.py</li><li>sample.txt</li></ul></html>'
+    assert response.read() == '<!DOCTYPE html><html><ul><p>. contains:</p><li><a href="./a_web_page.html">a_web_page.html</a></li><li><a href="./images">images</a></li><li><a href="./make_time.py">make_time.py</a></li><li><a href="./sample.txt">sample.txt</a></li></ul></html>'
 
 
 def test_server_html(start_server):
@@ -61,22 +61,22 @@ def test_server_error_server_405():
 def start_server():
     """Fixture to start server for tests. """
     target = None
-    if len(sys.argv) > 1:
-        server_method = sys.argv.pop(1)
-        if server_method not in ['select', 'gevent']:
-            print "server method must be one of 'select' or 'gevent'"
-            sys.exit(1)
-        if server_method == 'select':
-            from select_echo_server import server as target
-        else:
-            from gevent.server import StreamServer
-            from gevent_echo_server import echo
-            from gevent.monkey import patch_all
-            patch_all()
-            server = StreamServer(('127.0.0.1', 50000), echo)
-            target = server.serve_forever
-    else:
-        from html_server import start as target
+    # if len(sys.argv) > 1:
+    #     server_method = sys.argv.pop(1)
+    #     if server_method not in ['select', 'gevent']:
+    #         print "server method must be one of 'select' or 'gevent'"
+    #         sys.exit(1)
+    #     if server_method == 'select':
+    #         from select_echo_server import server as target
+    #     else:
+    #         from gevent.server import StreamServer
+    #         from gevent_echo_server import echo
+    #         from gevent.monkey import patch_all
+    #         patch_all()
+    #         server = StreamServer(('127.0.0.1', 50000), echo)
+    #         target = server.serve_forever
+    # else:
+    from html_server import start as target
 
     import threading
     server_thread = threading.Thread(target=target)
