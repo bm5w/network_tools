@@ -61,6 +61,7 @@ def test_server_error_server_405():
 @pytest.fixture(scope='session')
 def start_server():
     """Fixture to start server for tests. """
+    print 'started fixture'
     target = None
     # if len(sys.argv) > 1:
     #     server_method = sys.argv.pop(1)
