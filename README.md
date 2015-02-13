@@ -1,4 +1,4 @@
-[![Travis](<travis_badge_url>)](<travis_badge_url>)
+[![Travis](https://travis-ci.org/bm5w/network_tools.svg?branch=http2)](https://travis-ci.org/bm5w/network_tools.svg?branch=http2)
 # network_tools
 A simple HTTP server, which responds to HTTP 1.1 requests appropriately.
 The server parses the request and responds accordingly.
