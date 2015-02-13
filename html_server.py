@@ -77,7 +77,8 @@ def resource_uri(uri):
             contents = os.listdir(uri)
             body = '<!DOCTYPE html><html><ul><p>{} contains:</p>'.format(uri)
             for file_ in contents:
-                body = '{}<li>{}</li>'.format(body, file_)
+                body = '{}<li><a href="{}/{}">{}</a></li>'.\
+                    format(body, uri, file_, file_)
             body = '{}</ul></html>'.format(body)
         if os.path.isfile(uri):
             head = mimetypes.guess_type(uri)[0]
