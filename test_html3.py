@@ -4,6 +4,7 @@ import sys
 import pytest
 import urllib2
 from html_server import html_response
+import threading
 
 
 def test_server_home(start_server):
@@ -78,7 +79,7 @@ def start_server():
     # else:
     from html_server import start as target
 
-    import threading
     server_thread = threading.Thread(target=target)
     server_thread.daemon = True
     server_thread.start()
+    print 'server started'
