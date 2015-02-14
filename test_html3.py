@@ -9,6 +9,7 @@ import threading
 
 def test_server_home(start_server):
     """Test that html server returns directory listing as html."""
+    start_server()
     response = urllib2.urlopen('http://127.0.0.1:10001/')
     assert response.read() == '<!DOCTYPE html><html><ul><p>. contains:</p><li><a href="./a_web_page.html">a_web_page.html</a></li><li><a href="./images">images</a></li><li><a href="./make_time.py">make_time.py</a></li><li><a href="./sample.txt">sample.txt</a></li></ul></html>'
 
@@ -45,14 +46,14 @@ def test_server_error_HTTP20():
         'HTTP/1.1 505 HTTP Version Not Supported\r\nContent-Type: text/plain\r\nContent-length: 26\r\n\r\nHTTP Version Not Supported'
 
 
-def test_server_error_server_404():
+def test_server_error_server_404(start_server):
     """In response to HTTP20 request, server responds with correct error."""
     with pytest.raises(urllib2.HTTPError) as error:
         urllib2.urlopen('http://127.0.0.1:10001/images/JPEG_example2.jpg')
     assert str(error.value) == 'HTTP Error 404: Not Found'
 
 
-def test_server_error_server_405():
+def test_server_error_server_405(start_server):
     """In response to PUT request, server responds with correct error."""
     assert html_response('PUT /path/to/index.html HTTP/1.1\r\nHost: www.host1.com:80\r\n\r\n') == \
         'HTTP/1.1 405 Method Not Allowed\r\nContent-Type: text/plain\r\nContent-length: 18\r\n\r\nMethod Not Allowed'
