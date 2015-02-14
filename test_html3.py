@@ -9,7 +9,6 @@ import threading
 
 def test_server_home(start_server):
     """Test that html server returns directory listing as html."""
-    start_server()
     response = urllib2.urlopen('http://127.0.0.1:10001/')
     assert response.read() == '<!DOCTYPE html><html><ul><p>. contains:</p><li><a href="./a_web_page.html">a_web_page.html</a></li><li><a href="./images">images</a></li><li><a href="./make_time.py">make_time.py</a></li><li><a href="./sample.txt">sample.txt</a></li></ul></html>'
 
