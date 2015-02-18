@@ -117,6 +117,9 @@ def html_response(msg):
         out = response_ok(tupl)
     except (Error405, Error505, Error404) as e:
         out = str(e)
+    # this does not catch all exceptions we should do this
+    # add except Exceptions: raise some other exception
+    # we want the server to continue running in all cases
     return out
 
 
